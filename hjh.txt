@@ -1,0 +1,55 @@
+PROGRAM-05(ii):Implement the applicationofBFStocheckwhetheragivengraphisbipartite.
+#include<iostream>
+#include<queue>
+using namespace std;
+int G[50][50],n,i,j,v;
+bool isBipartite(int v)
+{
+	int colorArr[n];
+	for(i=1;i<=n;i++)
+	colorArr[i]=0;
+	colorArr[v]=1;
+	queue<int> q;
+	q.push(v);
+	while(!q.empty())
+	{
+		int u=q.front();
+		q.pop();
+		
+		if(G[u][u]==1)
+		return false;
+		for(j=1;j<=n;j++)
+		{
+			if(G[u][j]&&colorArr[j]==0)
+			{
+				colorArr[j]=1-colorArr[u];
+			q.push(j);
+			}
+			else if(G[u][j]&&colorArr[j]==colorArr[u])
+			return false;
+		}
+	}
+	return true;
+}
+int main()
+{
+	int edges,source,desti;
+	cout<<"\n Enter the number of nodes:";
+	cin>>n;
+	for(i=1;i<=n;i++)
+	for(j=1;j<=n;j++)
+	G[i][j]=0;
+	cout<<"\n Enter the number of edges:";
+	cin>>edges;
+	for(i=1;i<=edges;i++)
+	{
+		cout<<" Enter "<<i<<" source:";
+		cin>>source;
+		cout<<" Enter "<<i<<" destination:";
+		cin>>desti;
+		G[source][desti]=1;
+		G[desti][source]=1;
+	}
+	cout<<"\n Enter the source node : "; cin>>v;
+	isBipartite(v)?cout<<" Yes, the graph is bipartite.." : cout<<" No,the graph is not bipartite..";
+	return 0;
