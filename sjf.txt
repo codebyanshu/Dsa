@@ -1,0 +1,100 @@
+Implementation of SJF Scheduling algorithm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<iostream.h>
+#include<conio.h>
+int main()
+{
+    int n, bt[20], wt[20], tat[20], avwt=0, avtat=0, i, j, index[20], itemp, temp;
+    cout<<"Enter Number of Processes: ";
+    cin>>n;
+    cout<<"Enter Process Burst Time:"<<endl;
+    for(i=0;i<n;i++){
+        cout<<"P["<<i+1<<"]:";
+        cin>>bt[i];
+        index[i]=i;
+    }
+    for(i=0;i<n;i++)
+{
+        for(j=i;j<n;j++)
+{
+            if(bt[j]<bt[i])
+{
+                swap(bt[i], bt[j]);
+                swap(index[i], index[j]);
+            }
+        }
+    }
+    wt[0]=0;
+    cout<<endl<<"Process\t\tBurst Time\tWaiting Time\tTurnaround Time"<<endl;
+    for(i=0;i<n;i++)
+{
+        wt[i+1]= wt[i]+bt[i];
+        tat[i]= wt[i]+bt[i];
+        avwt=avwt+wt[i];
+        avtat=avtat+tat[i];
+        cout<<"P["<<index[i]+1<<"]\t\t"<<bt[i]<<"\t\t"<<wt[i]<<"\t\t"<<tat[i]<<endl;
+    }
+    cout<<endl<<"Average Waiting Time: "<<avwt/i<<endl;
+    cout<<"Average Turnaround Time: "<<avtat/n<<endl;
+    return 0;
+}
+
+
+Enter Number of Processes: 10
+ Enter Process Burst Time:
+ P[1]: 5
+ P[2]: 7
+ P[3]: 3
+ P[4]: 8
+ P[5]: 12
+ P[6]: 8
+ P[7]: 4
+ P[8]: 9
+ P[9]: 20
+ P[10]: 1 
+
+ Process         Burst Time      Waiting Time    Turnaround Time
+ P[10]               1              	0                  	1
+ P[3]                3              	1                  	4
+ P[7]                4              	4                  	8
+ P[1]                5              	8                  	13
+ P[2]                7              	13                 	20
+ P[4]                8              	20                 	28
+ P[6]                8              	28                 	36
+ P[8]                9              	36                 	45
+ P[5]                12             	45                 	57
+ P[9]                20             	57                 	77
+ 
+Average Waiting Time: 21
+ Average Turnaround Time: 29
