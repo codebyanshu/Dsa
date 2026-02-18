@@ -1,34 +1,4 @@
-Implementation of SJF Scheduling algorithm
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Implementation of SJF Scheduling algorith
 
 
 #include<iostream.h>
