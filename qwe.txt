@@ -1,0 +1,55 @@
+PROGRAM-01(a):Code and analyse solution toKnap Sack Problem using Greedy approach.
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+     float P[50],W[50],X[50],M[50];
+int m,n,i,u,j,m1,loc=0,c;
+float profit=0,temp,temp1,temp2;
+cout<<"\nEnter the knapsack capacity:";  cin>>m;
+u=m;
+cout<<"\nEnter the number of objects:";  cin>>n;
+for(i=0;i<n;i++)
+X[i]=0;
+cout<<"\n Enter the profits of objects:\n";
+for(i=0;i<n;i++)
+cin>>P[i];
+cout<<"\n Enter the weights of objects:\n";
+for(i=0;i<n;i++)
+cin>>W[i];
+for(i=0;i<n;i++)
+M[i]=(float)P[i]/W[i];
+for(i=0;i<n;i++){
+for(j=i+1;j<n;j++)  {
+if(M[i]<M[j]){
+temp=M[i];
+M[i]=M[j];
+ M[j]=temp;
+
+ temp1=P[i];
+P[i]=P[j];
+P[j]=temp1;
+
+temp2=W[i];
+W[i]=W[j];
+W[j]=temp2;
+}
+}}
+for(i=0;i<n;i++){
+if(W[i]>u)
+break;
+else {
+X[i]=1;  u=u-W[i];
+profit=profit+P[i]*X[i];
+}}
+if(i<=n)   {
+X[i]=(float)u/W[i];
+profit=profit+P[i]*X[i];
+}
+cout<<"\nMaximum profit is "<<fixed<<setprecision(2)<<profit;
+cout<<"\nThe solution vector is : \n";
+for(i=0;i<n;i++)
+cout<<X[i]<<"\t";
+return 0;
+}
