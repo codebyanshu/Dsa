@@ -1,0 +1,16 @@
+# min max algo
+def minimax(depth, node, isMax, scores):
+    # Stop when we reach the last level
+    if depth == 2:
+        return scores[node]
+    if isMax:
+        left = minimax(depth + 1, node * 2, False, scores)
+        right = minimax(depth + 1, node * 2 + 1, False, scores)
+        return max(left, right)
+    else:
+        left = minimax(depth + 1, node * 2, True, scores)
+        right = minimax(depth + 1, node * 2 + 1, True, scores)
+        return min(left, right)
+scores = [3, 5, 2, 9]
+answer = minimax(0, 0, True, scores)
+print("Best Value =", answer)
