@@ -1,0 +1,282 @@
+1. Basic Customized Plot using ggplot2
+# Install ggplot2 if required
+install.packages("ggplot2")
+
+# Load library
+library(ggplot2)
+
+# Sample data
+data <- data.frame(
+  Student = c("A", "B", "C", "D", "E"),
+  Marks = c(75, 88, 65, 92, 80)
+)
+
+# Customized bar chart
+ggplot(data, aes(x = Student, y = Marks)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Student Marks",
+    x = "Students",
+    y = "Marks"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 18, face = "bold"),
+    axis.title = element_text(size = 13)
+  )
+2. Multiple Plots using facet_wrap()
+This is an important advanced visualization technique.
+library(ggplot2)
+
+data <- data.frame(
+  Month = rep(c("Jan", "Feb", "Mar", "Apr"), 3),
+  Sales = c(100, 120, 140, 160,
+            80, 100, 110, 130,
+            120, 140, 150, 180),
+  Product = rep(c("Product A", "Product B", "Product C"), each = 4)
+)
+
+ggplot(data, aes(x = Month, y = Sales, group = Product)) +
+  geom_line(color = "blue", linewidth = 1) +
+  geom_point(size = 3) +
+  facet_wrap(~Product) +
+  labs(
+    title = "Monthly Sales of Different Products",
+    x = "Month",
+    y = "Sales"
+  ) +
+  theme_minimal()
+Output idea
+What will the output look like?
+The code creates 3 small line charts inside one figure—one for each product.
+       Monthly Sales of Different Products
+
+ Product A              Product B              Product C
+ 160 ┤             ●    130 ┤            ●     180 ┤             ●
+ 140 ┤        ●          120 ┤       ●          160 ┤        ●
+ 120 ┤   ●               110 ┤    ●             140 ┤   ●
+ 100 ┤●                   90 ┤ ●                 120 ┤●
+     └──────────             └──────────             └──────────
+       Jan Feb Mar Apr        Jan Feb Mar Apr        Jan Feb Mar Apr
+The actual graph will have three separate panels, and each panel will show the sales trend for one product.
+ 
+2. First understand the data
+This part creates the dataset:
+data <- data.frame(
+  Month = rep(c("Jan", "Feb", "Mar", "Apr"), 3),
+
+  Sales = c(100, 120, 140, 160,
+            80, 100, 110, 130,
+            120, 140, 150, 180),
+
+  Product = rep(c("Product A", "Product B", "Product C"), each = 4)
+)
+Think of it as making this table:
+Month	Sales	Product
+Jan	100	Product A
+Feb	120	Product A
+Mar	140	Product A
+Apr	160	Product A
+Jan	80	Product B
+Feb	100	Product B
+Mar	110	Product B
+Apr	130	Product B
+Jan	120	Product C
+Feb	140	Product C
+Mar	150	Product C
+Apr	180	Product C
+So we have 12 observations:
+•	4 months × 3 products = 12 rows 
+ 
+3. Understanding rep()
+This is probably the most confusing part.
+Month
+Month = rep(c("Jan", "Feb", "Mar", "Apr"), 3)
+First:
+c("Jan", "Feb", "Mar", "Apr")
+creates:
+Jan Feb Mar Apr
+Then:
+rep(..., 3)
+repeats it 3 times:
+Jan Feb Mar Apr
+Jan Feb Mar Apr
+Jan Feb Mar Apr
+Because we have 3 products.
+ 
+Product
+Product = rep(c("Product A", "Product B", "Product C"), each = 4)
+Here each = 4 means repeat each product 4 times:
+Product A Product A Product A Product A
+Product B Product B Product B Product B
+Product C Product C Product C Product C
+Why 4 times?
+Because there are 4 months for every product.
+ 
+4. Understanding ggplot()
+Now we start creating the graph:
+ggplot(data, aes(x = Month, y = Sales, group = Product))
+data
+ggplot(data, ...)
+means:
+Use the data dataset to create the graph.
+ 
+aes()
+aes means aesthetics.
+It tells R:
+Which variable should be used where?
+aes(
+  x = Month,
+  y = Sales,
+  group = Product
+)
+means:
+•	x = Month → put months on the X-axis 
+•	y = Sales → put sales on the Y-axis 
+•	group = Product → treat each product as a separate group 
+ 
+5. geom_line()
+geom_line(color = "blue", linewidth = 1)
+This creates the lines.
+For example, Product A has:
+Jan → 100
+Feb → 120
+Mar → 140
+Apr → 160
+R connects these points:
+100 ─── 120 ─── 140 ─── 160
+So we can see the sales trend.
+color = "blue"
+Makes the line blue.
+linewidth = 1
+Controls the thickness of the line.
+ 
+6. geom_point()
+geom_point(size = 3)
+This puts dots on the line.
+For Product A:
+             ●
+        ●
+   ●
+●
+Jan  Feb  Mar  Apr
+The dots make it easy to identify the exact values.
+size = 3 controls the size of the dots.
+ 
+7. The most important part: facet_wrap()
+facet_wrap(~Product)
+This is the main concept of this practical.
+It tells R:
+Create a separate graph for each Product.
+So instead of making one graph containing all three products, R creates:
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│   Product A     │ │   Product B     │ │   Product C     │
+│                 │ │                 │ │                 │
+│      ●          │ │       ●         │ │        ●        │
+│    ●            │ │     ●           │ │      ●          │
+│  ●              │ │   ●             │ │   ●             │
+│●                │ │ ●               │ │ ●               │
+└─────────────────┘ └─────────────────┘ └─────────────────┘
+What does ~Product mean?
+The ~ symbol can be understood as:
+Create separate panels according to Product.
+So:
+facet_wrap(~Product)
+means:
+Make one plot for Product A, one for Product B, and one for Product C.
+
+It creates three separate plots in one figure:
+•	Product A 
+•	Product B 
+•	Product C 
+facet_wrap(~Product) automatically creates separate panels.
+ 
+3. Multiple Plots using patchwork
+If you want to show different types of plots together, patchwork is very useful.
+install.packages("patchwork")
+
+library(ggplot2)
+library(patchwork)
+
+data <- data.frame(
+  Category = c("A", "B", "C", "D"),
+  Value = c(20, 35, 25, 40)
+)
+
+# Plot 1 - Bar chart
+p1 <- ggplot(data, aes(x = Category, y = Value)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Bar Chart") +
+  theme_minimal()
+
+# Plot 2 - Pie chart
+p2 <- ggplot(data, aes(x = "", y = Value, fill = Category)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y") +
+  labs(title = "Pie Chart") +
+  theme_void()
+
+# Display multiple plots
+p1 + p2
+This displays the bar chart and pie chart side-by-side.
+ 
+5. Multiple Plots in a 2 × 2 Layout
+library(ggplot2)
+library(patchwork)
+
+data <- data.frame(
+  Category = c("A", "B", "C", "D"),
+  Value = c(20, 35, 25, 40)
+)
+
+p1 <- ggplot(data, aes(Category, Value)) +
+  geom_col() +
+  labs(title = "Bar Chart")
+
+p2 <- ggplot(data, aes(Value)) +
+  geom_histogram(bins = 5) +
+  labs(title = "Histogram")
+
+p3 <- ggplot(data, aes(Category, Value)) +
+  geom_point(size = 4) +
+  labs(title = "Scatter Plot")
+
+p4 <- ggplot(data, aes(Category, Value)) +
+  geom_col() +
+  coord_polar() +
+  labs(title = "Circular Plot")
+
+# Arrange four plots
+(p1 + p2) / (p3 + p4)
+┌──────────────────────┬──────────────────────┐
+│                      │                      │
+│      BAR CHART       │      HISTOGRAM       │
+│                      │                      │
+│   █                  │       █              │
+│   █     █            │   █   █              │
+│   █     █     █      │   █   █   █          │
+│ █ █     █     █      │ █ █   █   █          │
+│ A B     C     D      │                      │
+│                      │                      │
+├──────────────────────┼──────────────────────┤
+│                      │                      │
+│     SCATTER PLOT     │    CIRCULAR PLOT     │
+│                      │                      │
+│       ●              │        ◯             │
+│   ●       ●          │      ◯   ◯           │
+│             ●        │        ◯             │
+│                      │                      │
+└──────────────────────┴──────────────────────┘
+Key concepts for your practical
+Topic	R function
+Advanced plotting	ggplot()
+Bar chart	geom_bar() / geom_col()
+Scatter plot	geom_point()
+Line chart	geom_line()
+Trend line	geom_smooth()
+Multiple panels	facet_wrap()
+Multiple plots together	patchwork
+Plot customization	theme(), labs()
+Clean theme	theme_minimal()
+Classic theme	theme_classic()
+
